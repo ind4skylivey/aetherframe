@@ -3,8 +3,7 @@
     "beforeDevCommand": "npm run dev",
     "beforeBuildCommand": "npm run build",
     "devPath": "http://localhost:3000",
-    "distDir": "../dist",
-    "withGlobalTauri": false
+    "distDir": "../dist"
   },
   "package": {
     "productName": "AetherFrame",
@@ -30,23 +29,6 @@
       },
       "notification": {
         "all": true
-      },
-      "dialog": {
-        "all": false,
-        "open": true,
-        "save": true
-      },
-      "fs": {
-        "all": false,
-        "readFile": true,
-        "writeFile": true,
-        "readDir": true,
-        "scope": ["$APPDATA/*", "$DOWNLOAD/*"]
-      },
-      "http": {
-        "all": false,
-        "request": true,
-        "scope": ["http://localhost:8000/*", "http://localhost:3000/*"]
       }
     },
     "bundle": {
@@ -104,8 +86,7 @@
     ],
     "systemTray": {
       "iconPath": "icons/icon.png",
-      "iconAsTemplate": true,
-      "menuOnLeftClick": false
+      "iconAsTemplate": true
     }
   }
 }
