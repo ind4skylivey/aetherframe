@@ -7,7 +7,10 @@
     "dev": "vite --host --port 3000",
     "build": "vite build",
     "preview": "vite preview --host --port 3000",
-    "start": "vite --host --port 3000"
+    "start": "vite --host --port 3000",
+    "tauri": "tauri",
+    "tauri:dev": "tauri dev",
+    "tauri:build": "tauri build"
   },
   "dependencies": {
     "react": "^18.3.1",
@@ -16,6 +19,8 @@
     "recharts": "^3.5.1"
   },
   "devDependencies": {
+    "@tauri-apps/api": "^2.9.1",
+    "@tauri-apps/cli": "^2.9.6",
     "@vitejs/plugin-react": "^4.3.4",
     "vite": "^5.4.8"
   }
