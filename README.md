@@ -337,8 +337,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 <div align="center">
 
-**Built with ⚡ by Antigravity AI**
-
 [⬆ back to top](#-aetherframe---advanced-malware-analysis-platform)
 
 </div>

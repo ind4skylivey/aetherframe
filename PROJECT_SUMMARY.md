@@ -328,7 +328,6 @@ AetherFrame es ahora una **plataforma completa y de nivel empresarial** para an�
 
 ---
 
-**Desarrollado con**: Antigravity AI + Human Collaboration
-**Fecha**: 2025-12-14
-**Versión**: 0.1.0
-**Estado**: ✅ **COMPLETO Y FUNCIONAL**
+**Date**: 2025-12-14
+**Version**: 0.1.0
+**Status**: ✅ **COMPLETE AND FUNCTIONAL**
