@@ -104,13 +104,12 @@ jobs:
 
       - name: Create Release
         run: |
-          # Find all artifact files
-          find artifacts -type f -exec echo {} \;
-
-          # Create release with gh CLI (supports --clobber to overwrite)
+          # Create release first
           gh release create ${{ github.ref_name }} \
-            artifacts/**/* \
             --title "Release ${{ github.ref_name }}" \
             --generate-notes
+
+          # Upload all artifact files (excluding directories)
+          find artifacts -type f -print0 | xargs -0 gh release upload ${{ github.ref_name }}
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
