@@ -81,10 +81,7 @@
         "minHeight": 600,
         "decorations": true,
         "transparent": false,
-        "center": true,
-        "webviewOptions": {
-          "useHttpsScheme": false
-        }
+        "center": true
       }
     ],
     "systemTray": {
