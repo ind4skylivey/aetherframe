@@ -110,6 +110,7 @@ aetherframe
 - 🌌 **Full Observability** - `/status` endpoint, event streams, auto-refresh UI
 - 🧩 **Hybrid Monorepo** - Independent packages, plugins, and modules
 - 🎨 **Premium UI/UX** - Dark theme with glassmorphism and live monitoring
+
 ---
 
 ## 🚀 Quick Start
@@ -193,25 +194,31 @@ flowchart TB
 ### Monorepo Structure
 
 ```
-aetherframe/
-├── packages/              # Core packages
-│   ├── core/             # Backend (FastAPI, Celery, DB)
-│   ├── frontend/         # Web UI (React + Vite)
-│   └── cli/              # CLI tool (Typer)
-├── plugins/              # Analysis plugins
-│   ├── umbriel/          # Anti-analysis detection
+aetherframe-ecosystem/
+├── AetherFrame/          # Main backend package
+│   ├── core/            # FastAPI backend core
+│   ├── plugins/         # Plugin infrastructure
+│   ├── cli/             # Command-line interface
+│   └── tests/           # Test suite
+├── ReverisNoctis/        # Desktop application (Tauri + React)
+│   ├── src/             # React frontend
+│   ├── src-tauri/       # Tauri backend (Rust)
+│   └── dist/            # Build artifacts
+├── plugins/              # Analysis plugins (6 total)
+│   ├── umbriel/          # Anti-analysis detection (50+ techniques)
 │   ├── noema/            # Intent classification
 │   ├── valkyrie/         # Binary validation
 │   ├── mnemosyne/        # State reconstruction
 │   ├── static_analyzer/  # Static analysis
-│   └── laintrace/        # Dynamic tracing
-├── shared/               # Shared resources
-│   ├── schemas/          # Common schemas
-│   ├── types/            # TypeScript types
-│   └── configs/          # Configurations
-└── tools/                # Development tools
-    ├── plugin-sdk/       # Plugin development kit
-    └── testing/          # Testing utilities
+│   └── laintrace/        # Dynamic tracing (Frida)
+├── packages/             # Additional packages
+│   ├── frontend/         # Web UI (React + Vite)
+│   ├── core/             # Backend services
+│   └── cli/              # CLI utilities
+├── LainTrace/            # Frida agent modules
+├── infra/                # Infrastructure configs
+├── docker/               # Docker configurations
+└── scripts/              # Automation scripts
 ```
 
 ---
@@ -461,18 +468,21 @@ docker compose -f docker-compose.allinone.yml build
 ### ✅ Completed
 
 - [x] Backend pipeline orchestration
-- [x] Plugin system architecture
+- [x] Plugin system architecture (6 plugins)
 - [x] React frontend with routing
 - [x] Analytics dashboard with charts
 - [x] Real-time monitoring
 - [x] Docker all-in-one setup
 - [x] Hybrid monorepo structure
+- [x] Desktop application (ReverisNoctis - Tauri)
+- [x] Cross-platform installers (Windows, macOS, Linux)
+- [x] Complete plugin ecosystem
 
 ### 🚧 In Progress
 
-- [ ] Desktop packaging (Tauri)
 - [ ] WebSocket real-time updates
 - [ ] Job comparison tool
+- [ ] Enhanced plugin marketplace
 
 ### 💡 Future
 
