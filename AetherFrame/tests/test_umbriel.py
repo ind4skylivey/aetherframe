@@ -45,7 +45,7 @@ def umbriel_plugin(umbriel_manifest):
 def test_job():
     """Create a test job."""
     return Job(
-        id=uuid4(),
+        id=1,  # Use integer ID for tests
         target="/tmp/test.bin",
         target_type=TargetType.binary,
         status=JobStatus.running,

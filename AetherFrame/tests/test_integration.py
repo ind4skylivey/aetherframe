@@ -154,7 +154,7 @@ class TestDataFlow:
     def test_context_accumulates_findings(self):
         """Previous findings should be available to later stages."""
         job = Job(
-            id=uuid4(),
+            id=1,
             target="/test",
             target_type=TargetType.binary,
             pipeline_id="quicklook"
@@ -175,7 +175,7 @@ class TestDataFlow:
     def test_context_accumulates_artifacts(self):
         """Previous artifacts should be available to later stages."""
         job = Job(
-            id=uuid4(),
+            id=2,
             target="/test",
             target_type=TargetType.binary,
             pipeline_id="quicklook"
@@ -196,7 +196,7 @@ class TestDataFlow:
     def test_pipeline_context_passed(self):
         """Pipeline context should be accessible."""
         job = Job(
-            id=uuid4(),
+            id=3,
             target="/test",
             target_type=TargetType.binary,
             pipeline_id="quicklook"
