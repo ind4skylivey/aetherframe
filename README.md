@@ -110,11 +110,6 @@ aetherframe
 - 🌌 **Full Observability** - `/status` endpoint, event streams, auto-refresh UI
 - 🧩 **Hybrid Monorepo** - Independent packages, plugins, and modules
 - 🎨 **Premium UI/UX** - Dark theme with glassmorphism and live monitoring
-
-<p align="center">
-  <img src="assets/aetherframe-swagger.gif" width="880" alt="AetherFrame API Swagger UI">
-</p>
-
 ---
 
 ## 🚀 Quick Start
