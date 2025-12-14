@@ -1,4 +1,5 @@
 import { BrowserRouter, NavLink, Route, Routes } from 'react-router-dom';
+import LiveMonitor from './components/LiveMonitor';
 import Analytics from './pages/Analytics';
 import ArtifactsView from './pages/ArtifactsView';
 import Dashboard from './pages/Dashboard';
