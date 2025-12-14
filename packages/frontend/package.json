@@ -1,0 +1,13 @@
+{
+  "name": "@aetherframe/frontend",
+  "version": "0.1.0",
+  "description": "AetherFrame Web UI",
+  "type": "module",
+  "private": false,
+  "scripts": {
+    "dev": "vite --host --port 3000",
+    "build": "vite build",
+    "preview": "vite preview",
+    "lint": "eslint src"
+  }
+}

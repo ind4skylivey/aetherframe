@@ -1,0 +1,55 @@
+# Multi-stage build for frontend
+FROM node:18-alpine AS frontend-builder
+
+WORKDIR /frontend
+COPY ReverisNoctis/package*.json ./
+RUN npm ci
+COPY ReverisNoctis/ ./
+RUN npm run build
+
+# Main application image
+FROM python:3.11-slim
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    nginx \
+    supervisor \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# Set working directory
+WORKDIR /app
+
+# Copy backend files
+COPY AetherFrame/requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY AetherFrame/ ./backend/
+
+# Copy built frontend from builder stage
+COPY --from=frontend-builder /frontend/dist /var/www/html
+
+# Copy ReverisNoctis CLI
+COPY ReverisNoctis/cli /app/cli
+COPY ReverisNoctis/requirements.txt /app/cli-requirements.txt
+RUN pip install --no-cache-dir -r cli-requirements.txt
+
+# Configure nginx
+COPY docker/nginx.conf /etc/nginx/nginx.conf
+COPY docker/aetherframe.conf /etc/nginx/sites-available/default
+
+# Configure supervisor
+COPY docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+
+# Create necessary directories
+RUN mkdir -p /var/log/aetherframe /var/run/aetherframe /app/data
+
+# Expose ports
+EXPOSE 80 8000
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
+    CMD curl -f http://localhost:80/health || exit 1
+
+# Start supervisor
+CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]

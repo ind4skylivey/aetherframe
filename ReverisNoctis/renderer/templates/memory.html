@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Memory Timeline — Reveris Noctis</title>
+  <style>
+    :root {
+      --bg-primary: #0a0a0f;
+      --bg-secondary: #12121a;
+      --bg-card: #1a1a24;
+      --border: #2a2a3a;
+      --text-primary: #e4e4e7;
+      --text-secondary: #a1a1aa;
+      --accent-cyan: #22d3ee;
+      --accent-purple: #a855f7;
+      --accent-pink: #ec4899;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.6;
+    }
+
+    .container { max-width: 1600px; margin: 0 auto; padding: 2rem; }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+    }
+
+    .header h1 {
+      background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* Timeline */
+    .timeline-container {
+      background: var(--bg-card);
+      border-radius: 12px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      border: 1px solid var(--border);
+    }
+
+    .timeline {
+      position: relative;
+      padding-left: 40px;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 15px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: linear-gradient(180deg, var(--accent-cyan), var(--accent-purple), var(--accent-pink));
+    }
+
+    .timeline-event {
+      position: relative;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      background: var(--bg-secondary);
+      border-radius: 8px;
+      border-left: 3px solid var(--border);
+      transition: all 0.2s;
+    }
+
+    .timeline-event:hover {
+      border-left-color: var(--accent-cyan);
+      transform: translateX(4px);
+    }
+
+    .timeline-event::before {
+      content: '';
+      position: absolute;
+      left: -33px;
+      top: 1.25rem;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--accent-cyan);
+      border: 2px solid var(--bg-primary);
+    }
+
+    .timeline-event.hook::before { background: var(--accent-purple); }
+    .timeline-event.syscall::before { background: #f97316; }
+    .timeline-event.memory::before { background: #ec4899; }
+    .timeline-event.state::before { background: #22c55e; }
+
+    .event-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 0.5rem;
+    }
+
+    .event-type {
+      font-size: 0.75rem;
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      background: var(--bg-primary);
+      color: var(--accent-cyan);
+      text-transform: uppercase;
+    }
+
+    .event-time {
+      font-family: monospace;
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+    }
+
+    .event-symbol {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1rem;
+      color: var(--accent-purple);
+    }
+
+    .event-payload {
+      font-family: monospace;
+      font-size: 0.75rem;
+      background: var(--bg-primary);
+      padding: 0.5rem;
+      border-radius: 4px;
+      margin-top: 0.5rem;
+      color: var(--text-secondary);
+      overflow-x: auto;
+    }
+
+    /* State Graph */
+    .graph-section {
+      background: var(--bg-card);
+      border-radius: 12px;
+      padding: 2rem;
+      border: 1px solid var(--border);
+    }
+
+    .graph-container {
+      background: var(--bg-primary);
+      border-radius: 8px;
+      padding: 2rem;
+      min-height: 400px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* Stats */
+    .stats-row {
+      display: flex;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .stat {
+      background: var(--bg-card);
+      padding: 1rem 2rem;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+    }
+
+    .stat-value {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--accent-cyan);
+    }
+
+    .stat-label {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+    }
+
+    /* Filter controls */
+    .controls {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .filter-btn {
+      padding: 0.5rem 1rem;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--text-primary);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .filter-btn:hover,
+    .filter-btn.active {
+      background: var(--accent-cyan);
+      color: var(--bg-primary);
+      border-color: var(--accent-cyan);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <h1>🧠 Mnemosyne Memory Timeline</h1>
+      <div style="color: var(--text-secondary)">
+        Duration: {{duration_ms}}ms | Events: {{event_count}}
+      </div>
+    </header>
+
+    <!-- Stats -->
+    <div class="stats-row">
+      <div class="stat">
+        <div class="stat-value">{{event_count}}</div>
+        <div class="stat-label">Total Events</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">{{state_count}}</div>
+        <div class="stat-label">States</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">{{transition_count}}</div>
+        <div class="stat-label">Transitions</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">{{thread_count}}</div>
+        <div class="stat-label">Threads</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">{{anomaly_count}}</div>
+        <div class="stat-label">Anomalies</div>
+      </div>
+    </div>
+
+    <!-- Timeline -->
+    <section class="timeline-container">
+      <h2 style="margin-bottom: 1rem; color: var(--accent-cyan);">📜 Execution Timeline</h2>
+
+      <div class="controls">
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="hook">Hooks</button>
+        <button class="filter-btn" data-filter="syscall">Syscalls</button>
+        <button class="filter-btn" data-filter="memory">Memory</button>
+        <button class="filter-btn" data-filter="state">State</button>
+      </div>
+
+      <div class="timeline" id="timeline">
+        {{#each events}}
+        <div class="timeline-event {{event_class}}" data-type="{{event_type}}">
+          <div class="event-header">
+            <span class="event-type">{{event_type}}</span>
+            <span class="event-time">{{timestamp}}</span>
+          </div>
+          <div class="event-symbol">{{symbol}}</div>
+          {{#if address}}
+          <div style="font-size: 0.75rem; color: var(--text-secondary);">@ {{address}}</div>
+          {{/if}}
+          {{#if payload}}
+          <div class="event-payload">{{payload}}</div>
+          {{/if}}
+        </div>
+        {{/each}}
+      </div>
+    </section>
+
+    <!-- State Graph -->
+    <section class="graph-section">
+      <h2 style="margin-bottom: 1rem; color: var(--accent-cyan);">🕸️ State Transition Graph</h2>
+      <div class="graph-container" id="graphContainer">
+        <svg id="stateGraph" width="100%" height="400">
+          <!-- Graph rendered by JS -->
+        </svg>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    // Event filtering
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        const filter = btn.dataset.filter;
+        document.querySelectorAll('.timeline-event').forEach(event => {
+          if (filter === 'all' || event.dataset.type.includes(filter)) {
+            event.style.display = 'block';
+          } else {
+            event.style.display = 'none';
+          }
+        });
+      });
+    });
+
+    // State graph visualization (simplified)
+    const graphData = {{graphData}};
+    // In production, use D3.js or similar for proper graph rendering
+  </script>
+</body>
+</html>

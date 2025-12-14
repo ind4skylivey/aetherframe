@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Intent Analysis — Reveris Noctis</title>
+  <style>
+    :root {
+      --bg-primary: #0a0a0f;
+      --bg-secondary: #12121a;
+      --bg-card: #1a1a24;
+      --border: #2a2a3a;
+      --text-primary: #e4e4e7;
+      --text-secondary: #a1a1aa;
+      --accent-cyan: #22d3ee;
+      --accent-purple: #a855f7;
+      --accent-pink: #ec4899;
+      --threat-minimal: #22c55e;
+      --threat-low: #84cc16;
+      --threat-medium: #eab308;
+      --threat-high: #f97316;
+      --threat-critical: #ef4444;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.6;
+    }
+
+    .container { max-width: 1400px; margin: 0 auto; padding: 2rem; }
+
+    /* Threat Gauge */
+    .threat-gauge-container {
+      display: flex;
+      justify-content: center;
+      padding: 3rem;
+      background: var(--bg-card);
+      border-radius: 16px;
+      margin-bottom: 2rem;
+      border: 1px solid var(--border);
+    }
+
+    .threat-gauge {
+      position: relative;
+      width: 300px;
+      height: 150px;
+    }
+
+    .gauge-arc {
+      fill: none;
+      stroke-width: 20;
+      stroke-linecap: round;
+    }
+
+    .gauge-bg { stroke: var(--bg-secondary); }
+    .gauge-value { transition: stroke-dashoffset 1s ease-out; }
+
+    .gauge-label {
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      text-align: center;
+    }
+
+    .gauge-score {
+      font-size: 3rem;
+      font-weight: 700;
+    }
+
+    .gauge-text {
+      font-size: 1rem;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    /* Intent Cards */
+    .intents-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .intent-card {
+      background: var(--bg-card);
+      border-radius: 12px;
+      padding: 1.5rem;
+      border: 1px solid var(--border);
+      transition: all 0.3s;
+    }
+
+    .intent-card:hover {
+      border-color: var(--accent-purple);
+      transform: translateY(-2px);
+    }
+
+    .intent-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 1rem;
+    }
+
+    .intent-category {
+      font-size: 1.125rem;
+      font-weight: 600;
+      color: var(--accent-cyan);
+    }
+
+    .intent-confidence {
+      font-size: 1.5rem;
+      font-weight: 700;
+    }
+
+    .intent-severity {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+
+    .intent-severity.critical { background: rgba(239,68,68,0.2); color: var(--threat-critical); }
+    .intent-severity.high { background: rgba(249,115,22,0.2); color: var(--threat-high); }
+    .intent-severity.medium { background: rgba(234,179,8,0.2); color: var(--threat-medium); }
+    .intent-severity.low { background: rgba(34,197,94,0.2); color: var(--threat-minimal); }
+
+    .intent-evidence {
+      margin-bottom: 1rem;
+    }
+
+    .intent-evidence h4 {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+
+    .intent-evidence ul {
+      list-style: none;
+      font-size: 0.875rem;
+    }
+
+    .intent-evidence li {
+      padding: 0.25rem 0;
+      padding-left: 1rem;
+      position: relative;
+    }
+
+    .intent-evidence li::before {
+      content: "→";
+      position: absolute;
+      left: 0;
+      color: var(--accent-purple);
+    }
+
+    .mitre-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .mitre-tag {
+      padding: 0.25rem 0.5rem;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      font-family: monospace;
+      font-size: 0.75rem;
+      color: var(--accent-pink);
+    }
+
+    /* MITRE Coverage */
+    .mitre-section {
+      background: var(--bg-card);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      border: 1px solid var(--border);
+    }
+
+    .mitre-matrix {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      gap: 0.5rem;
+    }
+
+    .mitre-cell {
+      padding: 0.75rem;
+      background: var(--bg-secondary);
+      border-radius: 8px;
+      text-align: center;
+      font-size: 0.875rem;
+      border: 1px solid var(--border);
+      transition: all 0.2s;
+    }
+
+    .mitre-cell.detected {
+      background: rgba(168, 85, 247, 0.2);
+      border-color: var(--accent-purple);
+      color: var(--accent-purple);
+    }
+
+    .mitre-cell .technique-id {
+      font-family: monospace;
+      font-weight: 600;
+    }
+
+    .mitre-cell .technique-name {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      margin-top: 0.25rem;
+    }
+
+    /* Recommendations */
+    .recommendations {
+      background: var(--bg-card);
+      border-radius: 12px;
+      padding: 1.5rem;
+      border: 1px solid var(--border);
+    }
+
+    .recommendation-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      padding: 1rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .recommendation-item:last-child { border-bottom: none; }
+
+    .recommendation-icon {
+      width: 32px;
+      height: 32px;
+      background: var(--bg-secondary);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .recommendation-text {
+      font-size: 0.9375rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1 style="text-align: center; margin-bottom: 2rem; background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+      🔮 Noema Intent Analysis
+    </h1>
+
+    <!-- Threat Gauge -->
+    <div class="threat-gauge-container">
+      <div class="threat-gauge">
+        <svg viewBox="0 0 200 100" width="300" height="150">
+          <path class="gauge-arc gauge-bg" d="M 20 90 A 70 70 0 0 1 180 90" />
+          <path
+            class="gauge-arc gauge-value"
+            d="M 20 90 A 70 70 0 0 1 180 90"
+            stroke="{{threat_color}}"
+            stroke-dasharray="220"
+            stroke-dashoffset="{{gauge_offset}}"
+          />
+        </svg>
+        <div class="gauge-label">
+          <div class="gauge-score" style="color: {{threat_color}}">{{threat_score}}%</div>
+          <div class="gauge-text">{{threat_level}} Threat</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Intent Cards -->
+    <section class="intents-grid">
+      {{#each intents}}
+      <div class="intent-card">
+        <div class="intent-header">
+          <span class="intent-category">{{category}}</span>
+          <span class="intent-confidence" style="color: {{color}}">{{confidence}}%</span>
+        </div>
+        <span class="intent-severity {{severity}}">{{severity}}</span>
+
+        <div class="intent-evidence">
+          <h4>Evidence Chain</h4>
+          <ul>
+            {{#each evidence}}
+            <li>{{this}}</li>
+            {{/each}}
+          </ul>
+        </div>
+
+        <div class="mitre-tags">
+          {{#each mitre_ids}}
+          <span class="mitre-tag">{{this}}</span>
+          {{/each}}
+        </div>
+      </div>
+      {{/each}}
+    </section>
+
+    <!-- MITRE Coverage -->
+    <section class="mitre-section">
+      <h2 style="margin-bottom: 1rem; color: var(--accent-cyan);">🎯 MITRE ATT&CK Coverage</h2>
+      <div class="mitre-matrix">
+        {{#each mitre_techniques}}
+        <div class="mitre-cell {{#if detected}}detected{{/if}}">
+          <div class="technique-id">{{id}}</div>
+          <div class="technique-name">{{name}}</div>
+        </div>
+        {{/each}}
+      </div>
+    </section>
+
+    <!-- Recommendations -->
+    <section class="recommendations">
+      <h2 style="margin-bottom: 1rem; color: var(--accent-cyan);">💡 Recommendations</h2>
+      {{#each recommendations}}
+      <div class="recommendation-item">
+        <div class="recommendation-icon">→</div>
+        <div class="recommendation-text">{{this}}</div>
+      </div>
+      {{/each}}
+    </section>
+  </div>
+</body>
+</html>

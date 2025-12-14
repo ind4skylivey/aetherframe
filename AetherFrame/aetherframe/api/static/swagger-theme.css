@@ -1,0 +1,185 @@
+:root {
+  --bg: #050915;
+  --panel: #0d1424;
+  --panel-strong: #111b31;
+  --border: #1c2a46;
+  --muted: #9fb0d0;
+  --text: #eaf1ff;
+  --accent: #6af0ff;
+  --accent-2: #ff66c4;
+  --accent-3: #9efc4f;
+  --badge-bg: linear-gradient(120deg, rgba(106, 240, 255, 0.2), rgba(255, 102, 196, 0.18));
+}
+
+body,
+.swagger-ui {
+  background: radial-gradient(80% 60% at 20% 20%, rgba(106, 240, 255, 0.08), transparent),
+    radial-gradient(70% 60% at 80% 10%, rgba(255, 102, 196, 0.08), transparent),
+    linear-gradient(135deg, #050915, #050c1a 55%, #040915);
+  color: var(--text);
+  font-family: "Space Grotesk", "Inter", system-ui, -apple-system, sans-serif;
+}
+
+.swagger-ui .topbar {
+  background: transparent;
+  box-shadow: none;
+  padding: 8px 0 0;
+}
+
+.swagger-ui .topbar .download-url-wrapper,
+.swagger-ui .topbar a {
+  display: none;
+}
+
+.swagger-ui .information-container,
+.swagger-ui section.models,
+.swagger-ui .opblock {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+  border-radius: 14px;
+  position: relative;
+  overflow: hidden;
+}
+
+.swagger-ui .information-container h2,
+.swagger-ui .opblock-tag.no-desc span {
+  color: var(--text);
+  letter-spacing: -0.01em;
+}
+
+.swagger-ui .opblock {
+  border-left: 3px solid rgba(106, 240, 255, 0.4);
+}
+
+.swagger-ui .opblock-summary {
+  background: var(--panel-strong);
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  color: var(--text);
+  transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease;
+}
+
+.swagger-ui .opblock-summary:hover {
+  transform: translateY(-1px);
+  border-color: rgba(106, 240, 255, 0.45);
+  box-shadow: 0 16px 40px rgba(106, 240, 255, 0.15);
+}
+
+.swagger-ui .opblock-summary-method {
+  border-radius: 8px;
+  padding: 6px 10px;
+  background: var(--badge-bg);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: var(--text);
+  box-shadow: 0 10px 30px rgba(106, 240, 255, 0.15);
+  position: relative;
+  overflow: hidden;
+}
+
+.swagger-ui .opblock-summary-path,
+.swagger-ui .opblock-summary-description {
+  color: var(--muted);
+}
+
+.swagger-ui .opblock.opblock-get .opblock-summary-method { background: linear-gradient(120deg, #6af0ff, #5de0ff); color: #041019; }
+.swagger-ui .opblock.opblock-post .opblock-summary-method { background: linear-gradient(120deg, #ff66c4, #ffa5d6); color: #1a0c16; }
+.swagger-ui .opblock.opblock-delete .opblock-summary-method { background: linear-gradient(120deg, #ff7b6b, #ffb199); color: #1a0c0c; }
+.swagger-ui .opblock.opblock-put .opblock-summary-method { background: linear-gradient(120deg, #9efc4f, #c8ff94); color: #0f160a; }
+
+.swagger-ui .opblock-summary-method::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(120deg, rgba(255, 255, 255, 0.18), transparent 55%);
+  opacity: 0;
+  transition: opacity 200ms ease;
+}
+.swagger-ui .opblock-summary:hover .opblock-summary-method::after {
+  opacity: 0.7;
+}
+
+.swagger-ui .opblock-body,
+.swagger-ui .opblock-section-header {
+  background: var(--panel);
+  border-color: var(--border);
+}
+
+.swagger-ui .opblock-section-header h4,
+.swagger-ui .opblock-body pre,
+.swagger-ui .model-box,
+.swagger-ui .model,
+.swagger-ui .model-title,
+.swagger-ui .prop-format,
+.swagger-ui .prop-type,
+.swagger-ui .parameter__name,
+.swagger-ui .parameter__type {
+  color: var(--text);
+}
+
+.swagger-ui .parameter__extension,
+.swagger-ui .response-col_status {
+  color: var(--accent);
+}
+
+.swagger-ui .model-box {
+  background: var(--panel-strong);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+
+.swagger-ui .btn {
+  background: var(--badge-bg);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: var(--text);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  border-radius: 10px;
+  box-shadow: 0 10px 25px rgba(106, 240, 255, 0.18);
+  position: relative;
+  overflow: hidden;
+}
+.swagger-ui .btn:hover {
+  box-shadow: 0 12px 30px rgba(255, 102, 196, 0.18);
+}
+
+.swagger-ui .execute-wrapper .btn {
+  background: linear-gradient(120deg, #6af0ff, #ff66c4);
+  border: none;
+  color: #041019;
+  font-weight: 700;
+  animation: pulse 3s ease-in-out infinite;
+}
+
+.swagger-ui .btn::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(120deg, rgba(255, 255, 255, 0.16), transparent 60%);
+  opacity: 0;
+  transition: opacity 180ms ease;
+}
+.swagger-ui .btn:hover::after {
+  opacity: 0.6;
+}
+
+.swagger-ui select,
+.swagger-ui textarea,
+.swagger-ui input[type="text"] {
+  background: #0b1120;
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: 10px;
+}
+
+.swagger-ui .scheme-container,
+.swagger-ui .opblock-tag-section {
+  background: transparent;
+  border: none;
+}
+
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(106, 240, 255, 0.22); }
+  50% { box-shadow: 0 0 0 12px rgba(106, 240, 255, 0.0); }
+  100% { box-shadow: 0 0 0 0 rgba(255, 102, 196, 0.0); }
+}

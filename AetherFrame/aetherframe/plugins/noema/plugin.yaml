@@ -1,0 +1,71 @@
+id: noema
+name: Noema
+version: 0.1.0
+kind: inferencer
+description: "Intent inference engine: classifies program behavior and explains WHY it behaves that way"
+author: "AetherFrame Team"
+
+capabilities:
+  - intent.classify
+  - intent.explain
+  - behavior.analyze
+  - threat.score
+  - pattern.match
+
+inputs:
+  - type: findings
+    description: "Findings from previous stages"
+  - type: artifacts
+    description: "Artifacts from Umbriel, Valkyrie, Mnemosyne"
+  - type: binary
+    formats: [pe, elf, macho, apk]
+
+outputs:
+  - type: findings
+    categories:
+      [
+        intent-malicious,
+        intent-evasive,
+        intent-persistence,
+        intent-exfiltration,
+      ]
+  - type: artifacts
+    formats: [json, report]
+
+config_schema:
+  type: object
+  properties:
+    depth:
+      type: string
+      enum: [shallow, deep]
+      default: deep
+      description: "Analysis depth"
+    explain:
+      type: boolean
+      default: true
+      description: "Generate explanations for classifications"
+    use_traces:
+      type: boolean
+      default: false
+      description: "Use trace data for behavioral analysis"
+    analyze_diff:
+      type: boolean
+      default: false
+      description: "Analyze diff results for intent changes"
+    confidence_threshold:
+      type: number
+      default: 0.5
+      description: "Minimum confidence for reporting"
+    taxonomy:
+      type: string
+      enum: [mitre_attack, custom, simple]
+      default: mitre_attack
+      description: "Intent taxonomy to use"
+
+dependencies:
+  - umbriel
+
+metadata:
+  license: "Proprietary"
+  homepage: "https://github.com/ind4skylivey/aetherframe-ecosystem"
+  tags: [intent, behavior, classification, threat-intel]

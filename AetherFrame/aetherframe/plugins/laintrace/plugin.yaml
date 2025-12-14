@@ -1,0 +1,59 @@
+id: laintrace
+name: LainTrace
+version: 0.1.0
+kind: tracer
+description: "Dynamic tracing engine: Frida-based function hooking and runtime analysis"
+author: "AetherFrame Team"
+
+capabilities:
+  - trace.function
+  - trace.syscall
+  - trace.memory
+  - hook.install
+  - hook.replace
+
+inputs:
+  - type: binary
+    formats: [pe, elf, macho, apk, dex]
+  - type: pid
+    description: "Process ID for live tracing"
+
+outputs:
+  - type: events
+    description: "TraceEvents from runtime hooks"
+  - type: artifacts
+    formats: [json, trace]
+
+config_schema:
+  type: object
+  properties:
+    profile:
+      type: string
+      enum: [minimal, strict, comprehensive]
+      default: strict
+      description: "Tracing profile"
+    timeout:
+      type: integer
+      default: 60
+      description: "Tracing timeout in seconds"
+    focus_changed_functions:
+      type: boolean
+      default: false
+      description: "Only trace functions from Valkyrie diff"
+    attach_mode:
+      type: string
+      enum: [spawn, attach]
+      default: spawn
+    include_syscalls:
+      type: boolean
+      default: true
+    include_memory:
+      type: boolean
+      default: true
+
+dependencies: []
+
+metadata:
+  license: "Proprietary"
+  homepage: "https://github.com/ind4skylivey/aetherframe-ecosystem"
+  tags: [frida, tracing, dynamic, hooks]

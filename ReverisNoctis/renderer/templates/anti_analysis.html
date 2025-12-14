@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Anti-Analysis Report — Reveris Noctis</title>
+    <style>
+      :root {
+        --bg-primary: #0a0a0f;
+        --bg-secondary: #12121a;
+        --bg-card: #1a1a24;
+        --border: #2a2a3a;
+        --text-primary: #e4e4e7;
+        --text-secondary: #a1a1aa;
+        --accent-cyan: #22d3ee;
+        --accent-purple: #a855f7;
+        --accent-pink: #ec4899;
+        --severity-critical: #ef4444;
+        --severity-high: #f97316;
+        --severity-medium: #eab308;
+        --severity-low: #22c55e;
+        --severity-info: #3b82f6;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Inter", "Segoe UI", system-ui, sans-serif;
+        background: var(--bg-primary);
+        color: var(--text-primary);
+        line-height: 1.6;
+      }
+
+      .container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 2rem;
+      }
+
+      /* Header */
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1.5rem 2rem;
+        background: linear-gradient(
+          135deg,
+          var(--bg-secondary) 0%,
+          var(--bg-card) 100%
+        );
+        border-bottom: 1px solid var(--border);
+        margin-bottom: 2rem;
+      }
+
+      .header h1 {
+        font-size: 1.5rem;
+        background: linear-gradient(
+          135deg,
+          var(--accent-cyan),
+          var(--accent-purple)
+        );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .header .meta {
+        text-align: right;
+        color: var(--text-secondary);
+        font-size: 0.875rem;
+      }
+
+      /* Summary Cards */
+      .summary-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+        margin-bottom: 2rem;
+      }
+
+      .summary-card {
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 1.5rem;
+        text-align: center;
+      }
+
+      .summary-card .value {
+        font-size: 2.5rem;
+        font-weight: 700;
+        background: linear-gradient(
+          135deg,
+          var(--accent-cyan),
+          var(--accent-purple)
+        );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      .summary-card .label {
+        color: var(--text-secondary);
+        font-size: 0.875rem;
+        margin-top: 0.5rem;
+      }
+
+      .summary-card.risk-high .value {
+        background: linear-gradient(
+          135deg,
+          var(--severity-high),
+          var(--severity-critical)
+        );
+        -webkit-background-clip: text;
+      }
+
+      /* Findings Table */
+      .findings-section {
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        overflow: hidden;
+        margin-bottom: 2rem;
+      }
+
+      .section-header {
+        padding: 1rem 1.5rem;
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .section-header h2 {
+        font-size: 1.125rem;
+        color: var(--accent-cyan);
+      }
+
+      .findings-table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+
+      .findings-table th,
+      .findings-table td {
+        padding: 1rem 1.5rem;
+        text-align: left;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .findings-table th {
+        background: var(--bg-secondary);
+        color: var(--text-secondary);
+        font-weight: 500;
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+
+      .findings-table tr:hover {
+        background: rgba(34, 211, 238, 0.05);
+      }
+
+      /* Severity Badge */
+      .severity-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.25rem;
+        padding: 0.25rem 0.75rem;
+        border-radius: 9999px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-transform: uppercase;
+      }
+
+      .severity-critical {
+        background: rgba(239, 68, 68, 0.2);
+        color: var(--severity-critical);
+        border: 1px solid var(--severity-critical);
+      }
+
+      .severity-high {
+        background: rgba(249, 115, 22, 0.2);
+        color: var(--severity-high);
+        border: 1px solid var(--severity-high);
+      }
+
+      .severity-medium {
+        background: rgba(234, 179, 8, 0.2);
+        color: var(--severity-medium);
+        border: 1px solid var(--severity-medium);
+      }
+
+      .severity-low {
+        background: rgba(34, 197, 94, 0.2);
+        color: var(--severity-low);
+        border: 1px solid var(--severity-low);
+      }
+
+      .severity-info {
+        background: rgba(59, 130, 246, 0.2);
+        color: var(--severity-info);
+        border: 1px solid var(--severity-info);
+      }
+
+      /* Category Tag */
+      .category-tag {
+        display: inline-block;
+        padding: 0.25rem 0.5rem;
+        background: var(--bg-secondary);
+        border: 1px solid var(--border);
+        border-radius: 4px;
+        font-size: 0.75rem;
+        color: var(--accent-purple);
+      }
+
+      /* Evidence Block */
+      .evidence {
+        font-family: "JetBrains Mono", "Fira Code", monospace;
+        font-size: 0.75rem;
+        background: var(--bg-primary);
+        padding: 0.5rem;
+        border-radius: 4px;
+        color: var(--accent-cyan);
+        max-width: 400px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      /* Entropy Chart */
+      .entropy-section {
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+      }
+
+      .entropy-bar {
+        height: 40px;
+        background: var(--bg-secondary);
+        border-radius: 8px;
+        overflow: hidden;
+        display: flex;
+      }
+
+      .entropy-segment {
+        height: 100%;
+        transition: all 0.3s ease;
+      }
+
+      .entropy-legend {
+        display: flex;
+        gap: 2rem;
+        margin-top: 1rem;
+        justify-content: center;
+      }
+
+      .legend-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.875rem;
+      }
+
+      .legend-color {
+        width: 12px;
+        height: 12px;
+        border-radius: 2px;
+      }
+
+      /* Recommendations */
+      .recommendations {
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 1.5rem;
+      }
+
+      .recommendations ul {
+        list-style: none;
+        padding-left: 0;
+      }
+
+      .recommendations li {
+        padding: 0.75rem 0;
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        align-items: flex-start;
+        gap: 0.75rem;
+      }
+
+      .recommendations li:last-child {
+        border-bottom: none;
+      }
+
+      .recommendations li::before {
+        content: "→";
+        color: var(--accent-cyan);
+        font-weight: bold;
+      }
+
+      /* Footer */
+      .footer {
+        text-align: center;
+        padding: 2rem;
+        color: var(--text-secondary);
+        font-size: 0.875rem;
+      }
+
+      .footer a {
+        color: var(--accent-cyan);
+        text-decoration: none;
+      }
+    </style>
+  </head>
+  <body>
+    <header class="header">
+      <h1>🛡️ Umbriel Anti-Analysis Report</h1>
+      <div class="meta">
+        <div>Target: <strong>{{target}}</strong></div>
+        <div>Generated: {{timestamp}}</div>
+      </div>
+    </header>
+
+    <div class="container">
+      <!-- Summary Cards -->
+      <div class="summary-grid">
+        <div class="summary-card">
+          <div class="value">{{total_findings}}</div>
+          <div class="label">Total Findings</div>
+        </div>
+        <div class="summary-card risk-high">
+          <div class="value">{{critical_count}}</div>
+          <div class="label">Critical</div>
+        </div>
+        <div class="summary-card">
+          <div class="value">{{high_count}}</div>
+          <div class="label">High</div>
+        </div>
+        <div class="summary-card">
+          <div class="value">{{entropy}}</div>
+          <div class="label">Entropy</div>
+        </div>
+        <div class="summary-card">
+          <div class="value">{{risk_score}}%</div>
+          <div class="label">Risk Score</div>
+        </div>
+      </div>
+
+      <!-- Entropy Visualization -->
+      <section class="entropy-section">
+        <div class="section-header">
+          <h2>📊 Entropy Profile</h2>
+        </div>
+        <div class="entropy-bar" id="entropyBar">
+          <!-- Dynamically filled by JS -->
+        </div>
+        <div class="entropy-legend">
+          <div class="legend-item">
+            <div class="legend-color" style="background: #22c55e"></div>
+            <span>Low (&lt;5.0)</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-color" style="background: #eab308"></div>
+            <span>Medium (5.0-7.0)</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-color" style="background: #ef4444"></div>
+            <span>High (&gt;7.0)</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Findings Table -->
+      <section class="findings-section">
+        <div class="section-header">
+          <h2>🔍 Detection Findings</h2>
+          <span>{{total_findings}} detections</span>
+        </div>
+        <table class="findings-table">
+          <thead>
+            <tr>
+              <th>Severity</th>
+              <th>Category</th>
+              <th>Title</th>
+              <th>Evidence</th>
+              <th>Confidence</th>
+            </tr>
+          </thead>
+          <tbody id="findingsBody">
+            <!-- Template row -->
+            {{#each findings}}
+            <tr>
+              <td>
+                <span class="severity-badge severity-{{severity}}"
+                  >{{severity}}</span
+                >
+              </td>
+              <td><span class="category-tag">{{category}}</span></td>
+              <td>{{title}}</td>
+              <td><code class="evidence">{{evidence}}</code></td>
+              <td>{{confidence}}%</td>
+            </tr>
+            {{/each}}
+          </tbody>
+        </table>
+      </section>
+
+      <!-- Recommendations -->
+      <section class="recommendations">
+        <div class="section-header" style="padding: 0 0 1rem 0; border: none">
+          <h2>💡 Recommendations</h2>
+        </div>
+        <ul id="recommendationsList">
+          {{#each recommendations}}
+          <li>{{this}}</li>
+          {{/each}}
+        </ul>
+      </section>
+    </div>
+
+    <footer class="footer">
+      <p>
+        Generated by <a href="#">Umbriel</a> — AetherFrame Anti-Analysis
+        Detector
+      </p>
+      <p>Reveris Noctis © 2025</p>
+    </footer>
+
+    <script>
+      // Entropy bar visualization
+      const entropyData = {{entropyData}};
+      const entropyBar = document.getElementById('entropyBar');
+
+      if (entropyData && entropyData.sections) {
+        entropyData.sections.forEach(section => {
+          const segment = document.createElement('div');
+          segment.className = 'entropy-segment';
+          segment.style.flex = section.size;
+
+          let color;
+          if (section.entropy < 5.0) {
+            color = '#22c55e';
+          } else if (section.entropy < 7.0) {
+            color = '#eab308';
+          } else {
+            color = '#ef4444';
+          }
+          segment.style.background = color;
+          segment.title = `Offset: 0x${section.offset.toString(16)}, Entropy: ${section.entropy.toFixed(2)}`;
+
+          entropyBar.appendChild(segment);
+        });
+      }
+    </script>
+  </body>
+</html>

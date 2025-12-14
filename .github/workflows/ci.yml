@@ -1,0 +1,51 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: AetherFrame
+    env:
+      ENVIRONMENT: test
+      AETHERFRAME_LICENSE_ENFORCE: "false"
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install deps
+        run: pip install --no-cache-dir -r requirements.txt
+      - name: Lint syntax
+        run: python -m compileall aetherframe
+      - name: Run tests
+        run: PYTHONPATH=. pytest
+
+  cli:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ReverisNoctis
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install CLI deps
+        run: pip install --no-cache-dir -r requirements.txt
+      - name: Smoke import
+        run: |
+          python - <<'PY'
+          import cli.main
+          print("cli import ok")
+          PY
+      - name: Build web UI
+        run: |
+          npm ci
+          npm run build

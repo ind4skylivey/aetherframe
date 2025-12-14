@@ -1,0 +1,62 @@
+id: mnemosyne
+name: Mnemosyne
+version: 0.1.0
+kind: reconstructor
+description: "Memory and state reconstruction engine: builds execution timelines and state graphs from trace events"
+author: "AetherFrame Team"
+
+capabilities:
+  - state.reconstruct
+  - timeline.build
+  - graph.generate
+  - memory.analyze
+  - flow.trace
+
+inputs:
+  - type: trace_log
+    formats: [json, laintrace]
+  - type: memory_dump
+  - type: events
+    description: "TraceEvents from LainTrace or other sources"
+
+outputs:
+  - type: artifacts
+    formats: [timeline, graph, json]
+  - type: findings
+    categories: [state-transition, memory-anomaly, heap-spray, stack-pivot]
+
+config_schema:
+  type: object
+  properties:
+    build_timeline:
+      type: boolean
+      default: true
+      description: "Build execution timeline"
+    build_graph:
+      type: boolean
+      default: true
+      description: "Build state transition graph"
+    detect_anomalies:
+      type: boolean
+      default: true
+      description: "Detect memory anomalies"
+    max_events:
+      type: integer
+      default: 10000
+      description: "Maximum events to process"
+    collapse_loops:
+      type: boolean
+      default: true
+      description: "Collapse repeated state transitions"
+    include_memory_ops:
+      type: boolean
+      default: true
+      description: "Include memory read/write events"
+
+dependencies:
+  - laintrace
+
+metadata:
+  license: "Proprietary"
+  homepage: "https://github.com/ind4skylivey/aetherframe-ecosystem"
+  tags: [memory, state, timeline, reconstruction, forensics]

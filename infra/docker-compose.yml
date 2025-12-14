@@ -1,0 +1,72 @@
+services:
+  aetherframe-api:
+    build:
+      context: ../AetherFrame
+      network: host
+    network_mode: host
+    env_file:
+      - ../.env
+    depends_on:
+      - postgres
+      - redis
+      - minio
+
+  aetherframe-worker:
+    build:
+      context: ../AetherFrame
+      network: host
+    network_mode: host
+    user: "65532:65532"
+    command: celery -A aetherframe.core.celery_app.celery_app worker --loglevel=info
+    env_file:
+      - ../.env
+    depends_on:
+      - redis
+
+  reveris-noctis:
+    build:
+      context: ../ReverisNoctis
+      network: host
+    network_mode: host
+    env_file:
+      - ../.env
+    depends_on:
+      - aetherframe-api
+
+  laintrace:
+    build:
+      context: ../LainTrace
+      network: host
+    network_mode: host
+    env_file:
+      - ../.env
+    depends_on:
+      - aetherframe-api
+
+  postgres:
+    image: postgres:16-alpine
+    network_mode: host
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7-alpine
+    network_mode: host
+
+  minio:
+    image: minio/minio:RELEASE.2024-09-22T00-33-43Z
+    network_mode: host
+    command: server /data --console-address :9001
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ACCESS_KEY}
+      MINIO_ROOT_PASSWORD: ${MINIO_SECRET_KEY}
+    volumes:
+      - minio-data:/data
+
+volumes:
+  pgdata:
+  minio-data:

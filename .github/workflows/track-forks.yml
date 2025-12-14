@@ -1,0 +1,64 @@
+name: Track Forks and Clones
+
+on:
+  fork:
+  schedule:
+    - cron: '0 9 * * 0'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  track:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Regenerate fingerprint
+        run: python .github/scripts/gen_fingerprint.py
+
+      - name: Gather fingerprint data
+        id: fp
+        run: |
+          echo "fingerprint_sha256=$(jq -r '.fingerprint_sha256' .fingerprint)" >> "$GITHUB_OUTPUT"
+          echo "timestamp_utc=$(jq -r '.timestamp_utc' .fingerprint)" >> "$GITHUB_OUTPUT"
+          echo "file_count=$(jq -r '.file_count' .fingerprint)" >> "$GITHUB_OUTPUT"
+
+      - name: Search for watermark header
+        id: search
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          HEADER="# aetherframe-ecosystem (proprietary) | Fingerprint: AETHERFRAME-FP-2025-098f058124bbcb6891adb2503839273334364898d9414c857aca457235ef0077"
+          gh api search/code -f q="$HEADER" > search.json
+          jq '.' search.json
+          echo "total_count=$(jq -r '.total_count' search.json)" >> "$GITHUB_OUTPUT"
+
+      - name: Notify webhook on matches
+        if: steps.search.outputs.total_count != '0'
+        env:
+          WATCH_WEBHOOK_URL: ${{ secrets.WATCH_WEBHOOK_URL }}
+        run: |
+          if [ -z "$WATCH_WEBHOOK_URL" ]; then
+            echo "WATCH_WEBHOOK_URL not configured; skipping notification.";
+            exit 0;
+          fi
+          payload=$(jq -n \
+            --arg repo "$GITHUB_REPOSITORY" \
+            --arg run_id "$GITHUB_RUN_ID" \
+            --arg total "${{ steps.search.outputs.total_count }}" \
+            --arg fingerprint "${{ steps.fp.outputs.fingerprint_sha256 }}" \
+            --arg tag "AETHERFRAME-FP-2025-098f058124bbcb6891adb2503839273334364898d9414c857aca457235ef0077" \
+            --arg timestamp "${{ steps.fp.outputs.timestamp_utc }}" \
+            --arg file_count "${{ steps.fp.outputs.file_count }}" \
+            '{repository:$repo, run_id:$run_id, matches:($total|tonumber), fingerprint_sha256:$fingerprint, fixed_tag:$tag, timestamp_utc:$timestamp, file_count:($file_count|tonumber)}')
+          curl -sSf -X POST -H "Content-Type: application/json" -d "$payload" "$WATCH_WEBHOOK_URL"

@@ -1,0 +1,4 @@
+typer==0.12.4
+click==8.1.7  # pin for typer compatibility (avoids make_metavar error on py3.13)
+rich==13.9.4
+requests==2.32.3

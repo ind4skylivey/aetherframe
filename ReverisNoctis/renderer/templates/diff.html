@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Binary Diff Report — Reveris Noctis</title>
+  <style>
+    :root {
+      --bg-primary: #0a0a0f;
+      --bg-secondary: #12121a;
+      --bg-card: #1a1a24;
+      --border: #2a2a3a;
+      --text-primary: #e4e4e7;
+      --text-secondary: #a1a1aa;
+      --accent-cyan: #22d3ee;
+      --accent-purple: #a855f7;
+      --added: #22c55e;
+      --removed: #ef4444;
+      --modified: #f97316;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.6;
+    }
+
+    .container { max-width: 1600px; margin: 0 auto; padding: 2rem; }
+
+    .header {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: 2rem;
+      padding: 2rem;
+      background: var(--bg-card);
+      border-radius: 12px;
+      margin-bottom: 2rem;
+    }
+
+    .binary-info {
+      background: var(--bg-secondary);
+      padding: 1rem;
+      border-radius: 8px;
+    }
+
+    .binary-info h3 {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      margin-bottom: 0.5rem;
+    }
+
+    .binary-info .name {
+      font-size: 1.125rem;
+      color: var(--accent-cyan);
+    }
+
+    .binary-info .hash {
+      font-family: monospace;
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+    }
+
+    .diff-arrow {
+      font-size: 2rem;
+      color: var(--accent-purple);
+    }
+
+    /* Summary Stats */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .stat-card {
+      background: var(--bg-card);
+      border-radius: 12px;
+      padding: 1.5rem;
+      text-align: center;
+      border: 1px solid var(--border);
+    }
+
+    .stat-card .value {
+      font-size: 2rem;
+      font-weight: 700;
+    }
+
+    .stat-card .label {
+      color: var(--text-secondary);
+      font-size: 0.875rem;
+    }
+
+    .stat-card.added .value { color: var(--added); }
+    .stat-card.removed .value { color: var(--removed); }
+    .stat-card.modified .value { color: var(--modified); }
+
+    /* Heatmap */
+    .heatmap-section {
+      background: var(--bg-card);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      border: 1px solid var(--border);
+    }
+
+    .heatmap-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2px;
+      padding: 1rem;
+      background: var(--bg-primary);
+      border-radius: 8px;
+      min-height: 200px;
+    }
+
+    .heatmap-cell {
+      width: 20px;
+      height: 20px;
+      border-radius: 2px;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+
+    .heatmap-cell:hover {
+      transform: scale(1.3);
+      z-index: 10;
+    }
+
+    .heatmap-legend {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin-top: 1rem;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.875rem;
+    }
+
+    .legend-color {
+      width: 16px;
+      height: 16px;
+      border-radius: 2px;
+    }
+
+    /* Changes Table */
+    .changes-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--bg-card);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .changes-table th,
+    .changes-table td {
+      padding: 1rem;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .changes-table th {
+      background: var(--bg-secondary);
+      color: var(--text-secondary);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+    }
+
+    .change-type {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    .change-type.added {
+      background: rgba(34, 197, 94, 0.2);
+      color: var(--added);
+    }
+
+    .change-type.removed {
+      background: rgba(239, 68, 68, 0.2);
+      color: var(--removed);
+    }
+
+    .change-type.modified {
+      background: rgba(249, 115, 22, 0.2);
+      color: var(--modified);
+    }
+
+    .function-name {
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--accent-cyan);
+    }
+
+    .address {
+      font-family: monospace;
+      color: var(--text-secondary);
+      font-size: 0.875rem;
+    }
+
+    .risk-bar {
+      width: 100px;
+      height: 8px;
+      background: var(--bg-secondary);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .risk-bar-fill {
+      height: 100%;
+      border-radius: 4px;
+      transition: width 0.3s;
+    }
+
+    /* Tooltip */
+    .tooltip {
+      position: absolute;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      padding: 0.75rem;
+      border-radius: 8px;
+      font-size: 0.875rem;
+      pointer-events: none;
+      z-index: 100;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Header with binary comparison -->
+    <div class="header">
+      <div class="binary-info">
+        <h3>OLD VERSION</h3>
+        <div class="name">{{old_name}}</div>
+        <div class="hash">SHA256: {{old_hash}}</div>
+        <div class="hash">Size: {{old_size}} bytes</div>
+      </div>
+
+      <div class="diff-arrow">→</div>
+
+      <div class="binary-info">
+        <h3>NEW VERSION</h3>
+        <div class="name">{{new_name}}</div>
+        <div class="hash">SHA256: {{new_hash}}</div>
+        <div class="hash">Size: {{new_size}} bytes</div>
+      </div>
+    </div>
+
+    <!-- Stats Grid -->
+    <div class="stats-grid">
+      <div class="stat-card added">
+        <div class="value">{{added_count}}</div>
+        <div class="label">Added Functions</div>
+      </div>
+      <div class="stat-card removed">
+        <div class="value">{{removed_count}}</div>
+        <div class="label">Removed Functions</div>
+      </div>
+      <div class="stat-card modified">
+        <div class="value">{{modified_count}}</div>
+        <div class="label">Modified Functions</div>
+      </div>
+      <div class="stat-card">
+        <div class="value">{{new_imports}}</div>
+        <div class="label">New Imports</div>
+      </div>
+      <div class="stat-card">
+        <div class="value" style="color: {{risk_color}}">{{risk_score}}%</div>
+        <div class="label">Risk Score</div>
+      </div>
+    </div>
+
+    <!-- Heatmap -->
+    <section class="heatmap-section">
+      <h2 style="margin-bottom: 1rem; color: var(--accent-cyan);">📊 Diff Heatmap</h2>
+      <div class="heatmap-container" id="heatmap">
+        <!-- Generated by JS -->
+      </div>
+      <div class="heatmap-legend">
+        <div class="legend-item">
+          <div class="legend-color" style="background: var(--added)"></div>
+          <span>Added</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-color" style="background: var(--removed)"></div>
+          <span>Removed</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-color" style="background: var(--modified)"></div>
+          <span>Modified (low risk)</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-color" style="background: #dc2626"></div>
+          <span>Modified (high risk)</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Changes Table -->
+    <section>
+      <h2 style="margin-bottom: 1rem; color: var(--accent-cyan);">📋 Function Changes</h2>
+      <table class="changes-table">
+        <thead>
+          <tr>
+            <th>Type</th>
+            <th>Function</th>
+            <th>Address</th>
+            <th>Size Delta</th>
+            <th>Risk</th>
+            <th>Reason</th>
+          </tr>
+        </thead>
+        <tbody id="changesBody">
+          {{#each changes}}
+          <tr>
+            <td><span class="change-type {{change_type}}">{{change_type}}</span></td>
+            <td><span class="function-name">{{name}}</span></td>
+            <td><span class="address">{{address}}</span></td>
+            <td>{{size_delta}}</td>
+            <td>
+              <div class="risk-bar">
+                <div class="risk-bar-fill" style="width: {{risk}}%; background: {{risk_color}}"></div>
+              </div>
+            </td>
+            <td>{{reason}}</td>
+          </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </section>
+  </div>
+
+  <script>
+    // Heatmap visualization
+    const heatmapData = {{heatmapData}};
+    const heatmap = document.getElementById('heatmap');
+
+    if (heatmapData && heatmapData.cells) {
+      heatmapData.cells.forEach(cell => {
+        const div = document.createElement('div');
+        div.className = 'heatmap-cell';
+        div.style.background = cell.color;
+        div.title = `${cell.name}\nAddress: ${cell.address}\nRisk: ${(cell.risk * 100).toFixed(0)}%`;
+        heatmap.appendChild(div);
+      });
+    }
+  </script>
+</body>
+</html>
