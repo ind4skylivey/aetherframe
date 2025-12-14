@@ -1,0 +1,36 @@
+id: static_analyzer
+name: Static Analyzer
+version: 0.1.0
+kind: analyzer
+description: "Basic static analysis: strings extraction, entropy, section analysis"
+author: "AetherFrame Team"
+
+capabilities:
+  - static.strings
+  - static.sections
+  - static.entropy
+  - static.headers
+
+inputs:
+  - type: binary
+    formats: [pe, elf, macho]
+
+outputs:
+  - type: findings
+  - type: artifacts
+    formats: [json, strings]
+
+config_schema:
+  type: object
+  properties:
+    extract_strings:
+      type: boolean
+      default: true
+    compute_entropy:
+      type: boolean
+      default: true
+    min_string_length:
+      type: integer
+      default: 6
+
+dependencies: []

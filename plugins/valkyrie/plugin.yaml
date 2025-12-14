@@ -1,0 +1,63 @@
+id: valkyrie
+name: Valkyrie
+version: 0.1.0
+kind: differ
+description: "Binary diff and evolution tracker: semantic function-level diffing with risk scoring"
+author: "AetherFrame Team"
+
+capabilities:
+  - diff.binary
+  - diff.semantic
+  - diff.function
+  - risk.score
+  - evolution.track
+  - heatmap.generate
+
+inputs:
+  - type: binary
+    formats: [pe, elf, macho]
+  - type: job_reference
+    description: "Reference to previous job for comparison"
+
+outputs:
+  - type: findings
+    categories:
+      [binary-diff, function-change, new-code, removed-code, risk-delta]
+  - type: artifacts
+    formats: [json, heatmap, graph]
+
+config_schema:
+  type: object
+  properties:
+    semantic:
+      type: boolean
+      default: true
+      description: "Use semantic diffing (slower but more accurate)"
+    generate_heatmap:
+      type: boolean
+      default: true
+      description: "Generate visual diff heatmap"
+    compute_risk:
+      type: boolean
+      default: true
+      description: "Compute risk score for changes"
+    ignore_relocations:
+      type: boolean
+      default: true
+      description: "Ignore relocation differences"
+    function_matching:
+      type: string
+      enum: [hash, signature, cfg]
+      default: signature
+      description: "Function matching strategy"
+    min_function_size:
+      type: integer
+      default: 16
+      description: "Minimum function size to consider"
+
+dependencies: []
+
+metadata:
+  license: "Proprietary"
+  homepage: "https://github.com/ind4skylivey/aetherframe-ecosystem"
+  tags: [diff, evolution, binary-analysis, security]

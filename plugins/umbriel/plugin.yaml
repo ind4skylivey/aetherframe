@@ -1,0 +1,61 @@
+id: umbriel
+name: Umbriel
+version: 0.1.0
+kind: detector
+description: "Anti-analysis detection engine: identifies anti-debug, anti-VM, anti-Frida, packing, and evasion techniques"
+author: "AetherFrame Team"
+
+capabilities:
+  - anti_analysis.scan
+  - anti_analysis.classify
+  - anti_debug.detect
+  - anti_vm.detect
+  - anti_frida.detect
+  - packing.detect
+  - entropy.analyze
+  - timing.detect
+
+inputs:
+  - type: binary
+    formats: [pe, elf, macho, apk, dex]
+  - type: memory_dump
+  - type: trace_log
+
+outputs:
+  - type: findings
+    categories: [anti-debug, anti-vm, anti-frida, packing, timing-check]
+  - type: artifacts
+    formats: [json, html]
+
+config_schema:
+  type: object
+  properties:
+    mode:
+      type: string
+      enum: [fast, thorough]
+      default: thorough
+      description: "Scan mode - fast skips some heuristics"
+    skip_entropy:
+      type: boolean
+      default: false
+      description: "Skip entropy analysis (faster)"
+    entropy_threshold:
+      type: number
+      default: 7.0
+      description: "Entropy threshold for packing detection"
+    api_list_path:
+      type: string
+      description: "Custom API list for detection"
+    skip_vm_checks:
+      type: boolean
+      default: false
+    skip_frida_checks:
+      type: boolean
+      default: false
+
+dependencies: []
+
+metadata:
+  license: "Proprietary"
+  homepage: "https://github.com/ind4skylivey/aetherframe-ecosystem"
+  tags: [anti-analysis, evasion, malware, security]
