@@ -522,3 +522,21 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE.txt) 
 [⬆ back to top](#-aetherframe-)
 
 </div>
+
+## ⚠️ Known Issues
+
+### Linux AppImage - EGL Display Error
+
+Some Linux systems with AMD GPUs may experience an EGL error when running the AppImage:
+
+```
+Could not create default EGL display: EGL_BAD_PARAMETER
+```
+
+**Workarounds:**
+1. Use the `.deb` package (recommended for Debian/Ubuntu)
+2. Convert `.deb` to Arch package with `debtap` (for Arch Linux)
+3. Use development mode: `cd ReverisNoctis && npm run tauri:dev`
+
+This is a known limitation of how AppImages bundle graphics libraries and doesn't affect the `.deb` package or other platforms.
+
