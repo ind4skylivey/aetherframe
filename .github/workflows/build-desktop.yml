@@ -97,13 +97,14 @@ jobs:
           path: artifacts
 
       - name: Create Release
-        uses: softprops/action-gh-release@v1
-        with:
-          files: |
-            artifacts/**/*
-          draft: false
-          prerelease: false
-          generate_release_notes: true
-          overwrite: true
+        run: |
+          # Find all artifact files
+          find artifacts -type f -exec echo {} \;
+
+          # Create release with gh CLI (supports --clobber to overwrite)
+          gh release create ${{ github.ref_name }} \
+            artifacts/**/* \
+            --title "Release ${{ github.ref_name }}" \
+            --generate-notes
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
