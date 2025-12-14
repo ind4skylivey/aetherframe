@@ -1,72 +1,195 @@
-# ⚡ AetherFrame - Advanced Malware Analysis Platform
+<!--
+ █████╗ ███████╗████████╗██╗  ██╗███████╗██████╗ ███████╗██████╗  █████╗ ███╗   ███╗███████╗
+██╔══██╗██╔════╝╚══██╔══╝██║  ██║██╔════╝██╔══██╗██╔════╝██╔══██╗██╔══██╗████╗ ████║██╔════╝
+███████║███████╗   ██║   ███████║█████╗  ██████╔╝█████╗  ██████╔╝███████║██╔████╔██║███████╗
+██╔══██║╚════██║   ██║   ██╔══██║██╔══╝  ██╔══██╗██╔══╝  ██╔══██╗██╔══██║██║╚██╔╝██║╚════██║
+██║  ██║███████║   ██║   ██║  ██║███████╗██║  ██║███████╗██║  ██║██║  ██║██║ ╚═╝ ██║███████║
+╚═╝  ╚═╝╚══════╝   ╚═╝   ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝     ╚═╝╚══════╝
+-->
 
-<div align="center">
+<p align="center">
+  <img src="assets/banner-ecosystem.png" alt="AetherFrame Banner" width="960">
+</p>
 
-![Status](https://img.shields.io/badge/status-production--ready-success)
-![Version](https://img.shields.io/badge/version-0.1.0-blue)
-![Backend](https://img.shields.io/badge/backend-FastAPI-009688)
-![Frontend](https://img.shields.io/badge/frontend-React-61DAFB)
-![License](https://img.shields.io/badge/license-MIT-green)
+<h1 align="center">⚡ AetherFrame ⚡</h1>
+<h3 align="center">"Advanced Malware Analysis with Hybrid Monorepo Architecture"</h3>
 
-**Enterprise-grade reverse engineering and malware analysis platform with real-time threat intelligence**
+<p align="center">
+  <img src="https://img.shields.io/badge/CI-passing-22d3ee?style=for-the-badge&logo=github&logoColor=0ff&labelColor=0b1224&color=14b8a6">
+  <img src="https://img.shields.io/badge/FastAPI-0.115-8b5cf6?style=for-the-badge&logo=fastapi&logoColor=0ff&labelColor=0b1224&color=7c3aed">
+  <img src="https://img.shields.io/badge/Celery-5.3-22c55e?style=for-the-badge&logo=celery&logoColor=0ff&labelColor=0b1224&color=10b981">
+  <img src="https://img.shields.io/badge/Postgres-16-3b82f6?style=for-the-badge&logo=postgresql&logoColor=0ff&labelColor=0b1224&color=2563eb">
+  <img src="https://img.shields.io/badge/Redis-7-e11d48?style=for-the-badge&logo=redis&logoColor=0ff&labelColor=0b1224&color=be123c">
+  <img src="https://img.shields.io/badge/MinIO-latest-ec4899?style=for-the-badge&logo=minio&logoColor=0ff&labelColor=0b1224&color=db2777">
+  <img src="https://img.shields.io/badge/React-18-646cff?style=for-the-badge&logo=react&logoColor=0ff&labelColor=0b1224&color=0ea5e9">
+  <img src="https://img.shields.io/badge/Docker-ready-14b8a6?style=for-the-badge&logo=docker&logoColor=0ff&labelColor=0b1224&color=06b6d4">
+</p>
 
-[Features](#-features) • [Quick Start](#-quick-start) • [Documentation](#-documentation) • [Screenshots](#-screenshots) • [Roadmap](#-roadmap)
-
-</div>
+<p align="center">
+  <img src="assets/reveris-demo.gif" width="880" alt="Reveris Noctis UI Demo">
+</p>
 
 ---
 
-## 🎯 Overview
+## 🔥 Why AetherFrame?
 
-AetherFrame is a comprehensive malware analysis platform combining powerful backend processing with a stunning, data-rich frontend interface. Built for security researchers, malware analysts, and threat intelligence teams.
+- 🚀 **Automated Analysis Pipelines** - Plugin-based orchestration with FastAPI + Celery + Redis
+- 🛡️ **Advanced Threat Detection** - 50+ anti-analysis techniques, behavioral patterns, obfuscation
+- 🎯 **Frida-Powered Tracing** - Live runtime introspection and instrumentation (LainTrace)
+- ⚙️ **Zero-Setup Stack** - Docker Compose with Postgres + MinIO + Redis pre-configured
+- 📊 **Real-Time Analytics** - Interactive dashboards with 6 chart types (Recharts)
+- 🌌 **Full Observability** - `/status` endpoint, event streams, auto-refresh UI
+- 🧩 **Hybrid Monorepo** - Independent packages, plugins, and modules
+- 🎨 **Premium UI/UX** - Dark theme with glassmorphism and live monitoring
 
-### Key Capabilities
-
-- 🛡️ **Multi-stage Analysis Pipelines** - Quick triage → Deep static → Dynamic analysis
-- 🔍 **Advanced Threat Detection** - 50+ anti-analysis techniques, packing, obfuscation
-- 📊 **Real-time Analytics** - Interactive dashboards with 6 chart types
-- 🎨 **Premium UI/UX** - Dark theme with glassmorphism and micro-animations
-- 🔄 **Live Monitoring** - Auto-refresh system with 5-second updates
-- 📦 **Artifact Management** - Organized storage with MinIO integration
+<p align="center">
+  <img src="assets/aetherframe-swagger.gif" width="880" alt="AetherFrame API Swagger UI">
+</p>
 
 ---
 
-## ✨ Features
+## 🚀 Quick Start
 
-### Backend (FastAPI + PostgreSQL + Celery)
+### One-Command Launch
+
+```bash
+# Clone repository
+git clone git@github.com:ind4skylivey/aetherframe.git
+cd aetherframe
+
+# Start everything
+./start.sh
+```
+
+**Access Points:**
+
+- 🌐 **Web UI**: http://localhost:3000
+- 🔍 **API Docs**: http://localhost:3000/api/docs
+- 💾 **MinIO Console**: http://localhost:9001
+
+### Alternative: Development Mode
+
+```bash
+# Backend
+cd packages/core
+docker compose up -d
+
+# Frontend (in another terminal)
+cd packages/frontend
+npm install
+npm run dev
+```
+
+---
+
+## 🧠 Architecture
+
+### System Overview
+
+```mermaid
+flowchart TB
+    subgraph Frontend["🎨 Frontend Layer"]
+        UI["React UI<br/>(Analytics + Live Monitor)"]
+        CLI["CLI Tool<br/>(Typer)"]
+    end
+
+    subgraph Backend["⚡ Backend Layer"]
+        API["FastAPI<br/>(REST API)"]
+        Celery["Celery Worker<br/>(Async Jobs)"]
+    end
+
+    subgraph Plugins["🧩 Plugin System"]
+        Umbriel["Umbriel<br/>(Anti-Analysis)"]
+        Noema["Noema<br/>(Intent Classification)"]
+        Valkyrie["Valkyrie<br/>(Binary Validation)"]
+        More["... 6 total plugins"]
+    end
+
+    subgraph Storage["💾 Data Layer"]
+        Postgres[("PostgreSQL<br/>(Jobs, Findings)")]
+        Redis[("Redis<br/>(Task Queue)")]
+        MinIO[("MinIO<br/>(Artifacts)")]
+    end
+
+    subgraph Tracing["🔍 Dynamic Analysis"]
+        LainTrace["LainTrace<br/>(Frida Agent)"]
+    end
+
+    UI -->|HTTP| API
+    CLI -->|HTTP| API
+    API -->|Tasks| Celery
+    Celery -->|Execute| Plugins
+    Celery -->|Store| Postgres
+    Celery -->|Queue| Redis
+    Celery -->|Artifacts| MinIO
+    LainTrace -->|Events| API
+    API -->|Read| Postgres
+```
+
+### Monorepo Structure
+
+```
+aetherframe/
+├── packages/              # Core packages
+│   ├── core/             # Backend (FastAPI, Celery, DB)
+│   ├── frontend/         # Web UI (React + Vite)
+│   └── cli/              # CLI tool (Typer)
+├── plugins/              # Analysis plugins
+│   ├── umbriel/          # Anti-analysis detection
+│   ├── noema/            # Intent classification
+│   ├── valkyrie/         # Binary validation
+│   ├── mnemosyne/        # State reconstruction
+│   ├── static_analyzer/  # Static analysis
+│   └── laintrace/        # Dynamic tracing
+├── shared/               # Shared resources
+│   ├── schemas/          # Common schemas
+│   ├── types/            # TypeScript types
+│   └── configs/          # Configurations
+└── tools/                # Development tools
+    ├── plugin-sdk/       # Plugin development kit
+    └── testing/          # Testing utilities
+```
+
+---
+
+## 📦 Features
+
+### Backend (FastAPI + Celery)
 
 - **Pipeline Orchestration**
 
   - Modular plugin system
-  - Configurable stages with conditional execution
-  - Celery-based async task processing
+  - Configurable analysis stages
+  - Conditional execution
+  - Async task processing with Celery
 
 - **Detection Engines**
 
-  - **Umbriel**: Anti-debugging, anti-VM, anti-Frida detection
+  - **Umbriel**: Anti-debugging, anti-VM, anti-Frida detection (50+ techniques)
   - **Noema**: Intent classification and behavioral analysis
   - **Valkyrie**: Binary validation and integrity checks
   - **Static Analyzer**: Comprehensive static analysis
-  - **LainTrace**: Dynamic tracing and instrumentation
+  - **LainTrace**: Dynamic tracing with Frida instrumentation
+  - **Mnemosyne**: State reconstruction from memory dumps
 
 - **Data Management**
   - PostgreSQL for structured data (jobs, findings, artifacts)
-  - MinIO for artifact storage
-  - Redis for task queue management
+  - MinIO for artifact storage (JSON, HTML, binary reports)
+  - Redis for task queue and caching
   - Alembic for database migrations
 
-### Frontend (React + Vite + Recharts)
+### Frontend (React + Vite)
 
 - **Six Main Views**
 
   - **Dashboard**: System overview and recent jobs
-  - **Analytics** ⭐: 6 interactive charts and threat intelligence
+  - **Analytics**: 6 interactive charts with threat intelligence
   - **Launch**: Interactive pipeline submission interface
   - **Job Details**: Comprehensive analysis results
-  - **Findings**: Filterable threat browser
+  - **Findings**: Filterable threat browser with severity indicators
   - **Artifacts**: Downloadable reports gallery
 
-- **Visualizations**
+- **Visualizations** (Recharts)
 
   - Severity distribution (Pie chart)
   - Category breakdown (Bar chart)
@@ -75,268 +198,253 @@ AetherFrame is a comprehensive malware analysis platform combining powerful back
   - Risk score trends (Line chart)
   - Confidence distribution (Bar chart)
 
-- **Real-time Features**
-  - LiveMonitor sidebar with auto-refresh
+- **Real-Time Features**
+  - LiveMonitor sidebar with auto-refresh (5s)
   - System health indicators
   - Live metrics counters
-  - HMR for instant development updates
+  - Hot Module Replacement (HMR) for development
 
 ---
 
-## 🚀 Quick Start
+## 🎯 Pipeline Types
+
+| Pipeline          | Description                                    | Speed  | Depth      | Use Case            |
+| ----------------- | ---------------------------------------------- | ------ | ---------- | ------------------- |
+| **quicklook**     | Fast triage with anti-analysis detection       | ⚡⚡⚡ | ⭐         | Initial assessment  |
+| **deep-static**   | Comprehensive static analysis + decompilation  | ⚡⚡   | ⭐⭐⭐     | Detailed inspection |
+| **dynamic-first** | Runtime analysis with Frida instrumentation    | ⚡     | ⭐⭐⭐⭐   | Behavioral analysis |
+| **full-audit**    | Complete: static + dynamic + ML classification | ⚡     | ⭐⭐⭐⭐⭐ | Full investigation  |
+
+---
+
+## 🔧 Installation
 
 ### Prerequisites
 
 - Docker & Docker Compose
-- Node.js 16+ & npm
-- Python 3.11+
+- Node.js 16+ & npm (for frontend development)
+- Python 3.11+ (for backend development)
 
-### 1. Clone & Setup
+### All-in-One (Recommended)
+
+Uses Docker Compose with all services in one container:
 
 ```bash
-git clone <repository-url>
-cd aetherframe-ecosystem
+./start.sh
 ```
 
-### 2. Start Backend
+### Manual Setup
+
+**Backend:**
 
 ```bash
-cd AetherFrame
-docker-compose up -d
+cd packages/core
+docker compose up -d  # Start dependencies
+pip install -r requirements.txt
+uvicorn aetherframe.main:app --reload
 ```
 
-Services will start:
-
-- API: http://localhost:8000
-- PostgreSQL: localhost:5432
-- Redis: localhost:6379
-- MinIO: http://localhost:9001
-
-### 3. Start Frontend
+**Frontend:**
 
 ```bash
-cd ReverisNoctis
+cd packages/frontend
 npm install
 npm run dev
 ```
 
-Frontend available at: http://localhost:3000
-
-### 4. Run Analysis (CLI)
+**Plugins:**
 
 ```bash
-cd ReverisNoctis
-python -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
+# Install specific plugins
+pip install -e plugins/umbriel
+pip install -e plugins/noema
 
-# Run quicklook pipeline
-python cli/main.py run /path/to/binary.exe --pipeline quicklook --wait
+# Or install all
+python scripts/install-all.py
 ```
 
 ---
 
-## 📊 Pipeline Types
+## 📊 API Endpoints
 
-| Pipeline          | Description                                   | Speed  | Depth      |
-| ----------------- | --------------------------------------------- | ------ | ---------- |
-| **quicklook**     | Fast triage with anti-analysis detection      | ⚡⚡⚡ | ⭐         |
-| **deep-static**   | Comprehensive static analysis + decompilation | ⚡⚡   | ⭐⭐⭐     |
-| **dynamic-first** | Runtime analysis with Frida instrumentation   | ⚡     | ⭐⭐⭐⭐   |
-| **full-audit**    | Complete analysis: static + dynamic + ML      | ⚡     | ⭐⭐⭐⭐⭐ |
+### System
+
+- `GET /status` - System health and metrics
+- `GET /metrics` - Prometheus metrics
+
+### Jobs
+
+- `GET /jobs` - List all jobs
+- `GET /jobs/{id}` - Get job details
+- `POST /jobs` - Submit new analysis job
+- `GET /jobs/{id}/findings` - Get job findings
+- `GET /jobs/{id}/artifacts` - Get job artifacts
+- `GET /jobs/{id}/events` - Get job events
+
+### Global Queries
+
+- `GET /findings` - All findings across jobs
+- `GET /artifacts` - All artifacts
+- `GET /plugins` - List available plugins
+
+**Interactive Docs**: http://localhost:8000/docs
+
+<p align="center">
+  <img src="assets/laintrace-probe.png" width="880" alt="LainTrace Probe Event">
+</p>
+
+---
+
+## 🧩 Plugin Development
+
+### Create a Plugin
+
+```python
+# plugins/my_plugin/plugin.py
+from aetherframe.plugins.base import BasePlugin
+
+class MyPlugin(BasePlugin):
+    def analyze(self, target: str) -> dict:
+        return {
+            "findings": [...],
+            "artifacts": [...],
+            "metadata": {...}
+        }
+```
+
+### Register Plugin
+
+```yaml
+# plugins/my_plugin/plugin.yaml
+name: my_plugin
+version: 1.0.0
+description: My custom analysis plugin
+author: your-name
+entry_point: my_plugin.plugin:MyPlugin
+```
+
+### Install Plugin
+
+```bash
+cd plugins/my_plugin
+pip install -e .
+```
+
+See [Plugin SDK](./tools/plugin-sdk/) for full documentation.
 
 ---
 
 ## 🎨 Screenshots
 
-### Dashboard
+### Analytics Dashboard
 
-![Dashboard](docs/screenshots/dashboard.png)
-_Main dashboard with job overview and system status_
+Modern analytics with interactive charts, threat intelligence, and real-time metrics.
 
-### Analytics
+### Live Monitoring
 
-![Analytics](docs/screenshots/analytics.png)
-_Interactive analytics with 6 chart types_
+Auto-refreshing sidebar showing system health, active jobs, and latest findings.
 
 ### Job Details
 
-![Job Details](docs/screenshots/job-details.png)
-_Comprehensive findings, artifacts, and events view_
+Comprehensive view with tabbed interface for findings, artifacts, and trace events.
 
 ---
 
-## 📁 Project Structure
+## 🔄 Development Workflow
 
-```
-aetherframe-ecosystem/
-├── AetherFrame/              # Backend (FastAPI)
-│   ├── aetherframe/
-│   │   ├── api/             # REST API endpoints
-│   │   ├── core/            # Pipeline engine, tasks
-│   │   ├── plugins/         # Detection plugins
-│   │   ├── schemas/         # Pydantic models
-│   │   └── utils/           # Helpers
-│   └── docker-compose.yml
-│
-├── ReverisNoctis/           # Frontend (React)
-│   ├── src/
-│   │   ├── pages/           # 6 main pages
-│   │   ├── components/      # Charts, LiveMonitor
-│   │   ├── hooks/           # API hooks
-│   │   └── styles.css       # Premium CSS
-│   ├── cli/                 # CLI tool
-│   └── package.json
-│
-└── tests/
-    └── samples/             # Test binaries
-```
-
----
-
-## 🔧 Configuration
-
-### Environment Variables
-
-**Backend** (`.env`):
+### Make Changes
 
 ```bash
-POSTGRES_URL=postgresql://user:pass@localhost:5432/aetherframe
-REDIS_HOST=localhost
-REDIS_PORT=6379
-MINIO_ENDPOINT=localhost:9000
-AETHERFRAME_LICENSE_ENFORCE=false  # For development
-```
+# Backend
+cd packages/core
+# Edit code
+pytest  # Run tests
 
-**Frontend** (`.env`):
+# Frontend
+cd packages/frontend
+# Edit code
+npm run dev  # Auto-reload
 
-```bash
-VITE_API_BASE=http://localhost:8000
-```
-
----
-
-## 📖 Documentation
-
-- [Backend Success Summary](backend_success_summary.md)
-- [Phase 2: Frontend Complete](PHASE2_FRONTEND_COMPLETE.md)
-- [Phase 3: Analytics Complete](PHASE3_ANALYTICS_COMPLETE.md)
-- [Project Summary](PROJECT_SUMMARY.md)
-
-### API Documentation
-
-Once the backend is running, visit:
-
-- **Swagger UI**: http://localhost:8000/docs
-- **ReDoc**: http://localhost:8000/redoc
-
----
-
-## 🛠️ Development
-
-### Backend Development
-
-```bash
-cd AetherFrame
-docker-compose up -d postgres redis minio  # Start dependencies only
-python -m aetherframe.main  # Run FastAPI in dev mode
-celery -A aetherframe.core.celery_app worker --loglevel=info  # Start worker
-```
-
-### Frontend Development
-
-```bash
-cd ReverisNoctis
-npm run dev  # Starts Vite dev server with HMR
+# Plugin
+cd plugins/umbriel
+# Edit code
+pytest tests/
 ```
 
 ### Database Migrations
 
 ```bash
-cd AetherFrame
+cd packages/core
 alembic revision --autogenerate -m "Description"
 alembic upgrade head
+```
+
+### Build for Production
+
+```bash
+# Frontend
+cd packages/frontend
+npm run build
+
+# Docker all-in-one
+docker compose -f docker-compose.allinone.yml build
 ```
 
 ---
 
 ## 🗺️ Roadmap
 
-### ✅ Phase 1: Backend Preparation (Complete)
+### ✅ Completed
 
-- Pipeline execution
-- Plugin system
-- Data persistence
+- [x] Backend pipeline orchestration
+- [x] Plugin system architecture
+- [x] React frontend with routing
+- [x] Analytics dashboard with charts
+- [x] Real-time monitoring
+- [x] Docker all-in-one setup
+- [x] Hybrid monorepo structure
 
-### ✅ Phase 2: Frontend Scaffolding (Complete)
+### 🚧 In Progress
 
-- React SPA with routing
-- 5 main pages
-- Premium design system
+- [ ] Desktop packaging (Tauri)
+- [ ] WebSocket real-time updates
+- [ ] Job comparison tool
 
-### ✅ Phase 3: Analytics & Real-time (Complete)
+### 💡 Future
 
-- 6 interactive charts
-- Live monitoring
-- Enhanced hooks
-
-### 🚧 Phase 4: Desktop Packaging (Planned)
-
-- Electron/Tauri integration
-- Native installers
-- System tray support
-- Desktop notifications
-
-### 💡 Future Enhancements
-
-- WebSocket real-time push
-- Job comparison tool
-- PDF/CSV export
-- Custom dashboards
-- Alert system
-- Multi-user auth
-- Cloud deployment
-- ML-powered classification
-
----
-
-## 🤝 Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+- [ ] ML-powered threat classification
+- [ ] Multi-user authentication
+- [ ] Cloud deployment automation
+- [ ] Mobile companion app
+- [ ] Plugin marketplace
 
 ---
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE.txt) file for details.
 
 ---
 
-## 👏 Acknowledgments
+## 🙏 Acknowledgments
 
 - FastAPI for the excellent web framework
-- React team for the UI library
+- Celery for robust task processing
 - Recharts for beautiful visualizations
+- Frida for dynamic instrumentation
 - PostgreSQL, Redis, and MinIO teams
 
 ---
 
 ## 📞 Contact
 
-**Project**: AetherFrame Ecosystem
-**Status**: Production Ready (v0.1.0)
-**Last Updated**: 2025-12-14
+**Author**: [@ind4skylivey](https://github.com/ind4skylivey)
+**Repository**: [aetherframe](https://github.com/ind4skylivey/aetherframe)
 
 ---
 
 <div align="center">
 
-[⬆ back to top](#-aetherframe---advanced-malware-analysis-platform)
+[⬆ back to top](#-aetherframe-)
 
 </div>
