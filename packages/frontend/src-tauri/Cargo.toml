@@ -1,0 +1,21 @@
+[package]
+name = "aetherframe"
+version = "0.1.0"
+description = "Advanced Malware Analysis Platform"
+authors = ["ind4skylivey"]
+license = "MIT"
+repository = "https://github.com/ind4skylivey/aetherframe"
+edition = "2021"
+rust-version = "1.70"
+
+[build-dependencies]
+tauri-build = { version = "1.5", features = [] }
+
+[dependencies]
+serde_json = "1.0"
+serde = { version = "1.0", features = ["derive"] }
+tauri = { version = "1.5", features = ["notification", "system-tray", "shell-open", "window-close", "window-hide", "window-show", "window-maximize", "window-minimize", "window-unmaximize", "window-unminimize", "window-start-dragging", "dialog-open", "dialog-save", "fs-read-file", "fs-write-file", "fs-read-dir", "http-request"] }
+
+[features]
+default = ["custom-protocol"]
+custom-protocol = ["tauri/custom-protocol"]
