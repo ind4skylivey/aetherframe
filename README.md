@@ -31,6 +31,67 @@
 
 ---
 
+## 📥 Download
+
+### Desktop Applications
+
+<p align="center">
+  <a href="https://github.com/ind4skylivey/aetherframe/releases/latest">
+    <img src="https://img.shields.io/github/v/release/ind4skylivey/aetherframe?style=for-the-badge&logo=github&logoColor=0ff&labelColor=0b1224&color=6af0ff&label=Latest%20Release" alt="Latest Release">
+  </a>
+  <a href="https://github.com/ind4skylivey/aetherframe/releases/latest">
+    <img src="https://img.shields.io/github/downloads/ind4skylivey/aetherframe/total?style=for-the-badge&logo=github&logoColor=0ff&labelColor=0b1224&color=10b981&label=Downloads" alt="Downloads">
+  </a>
+</p>
+
+<p align="center">
+  <a href="https://github.com/ind4skylivey/aetherframe/releases/latest">
+    <img src="https://img.shields.io/badge/Linux-AppImage%20%7C%20.deb-FCC624?style=for-the-badge&logo=linux&logoColor=black&labelColor=0b1224" alt="Linux">
+  </a>
+  <a href="https://github.com/ind4skylivey/aetherframe/releases/latest">
+    <img src="https://img.shields.io/badge/macOS-.dmg%20%7C%20.app-000000?style=for-the-badge&logo=apple&logoColor=white&labelColor=0b1224" alt="macOS">
+  </a>
+  <a href="https://github.com/ind4skylivey/aetherframe/releases/latest">
+    <img src="https://img.shields.io/badge/Windows-.exe%20%7C%20.msi-0078D6?style=for-the-badge&logo=windows&logoColor=white&labelColor=0b1224" alt="Windows">
+  </a>
+</p>
+
+<p align="center">
+  <strong>👉 <a href="https://github.com/ind4skylivey/aetherframe/releases/latest">Download Latest Release</a></strong>
+</p>
+
+### Installation
+
+**Linux:**
+
+```bash
+# AppImage (portable)
+chmod +x aetherframe_*.AppImage
+./aetherframe_*.AppImage
+
+# Debian/Ubuntu
+sudo dpkg -i aetherframe_*.deb
+aetherframe
+```
+
+**macOS:**
+
+```bash
+# Open .dmg file
+# Drag AetherFrame.app to Applications
+# Launch from Applications folder
+```
+
+**Windows:**
+
+```
+# Run installer (.exe or .msi)
+# Follow installation wizard
+# Launch from Start Menu
+```
+
+---
+
 ## 🔥 Why AetherFrame?
 
 - 🚀 **Automated Analysis Pipelines** - Plugin-based orchestration with FastAPI + Celery + Redis
