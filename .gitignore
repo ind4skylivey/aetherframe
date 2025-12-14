@@ -32,3 +32,20 @@ pytest-cache/
 
 # Generated docs
 site/
+
+# Internal Documentation (exclude from repo)
+PHASE*.md
+*_GUIDE.md
+*_COMPLETE.md
+*_STATUS.md
+*_SUMMARY.md
+MIGRATION_GUIDE.md
+MONOREPO_STRUCTURE.md
+NEW_REPO_GUIDE.md
+FRESH_INIT_GUIDE.md
+FRESH_INIT_STATUS.md
+OPTION*.md
+PROJECT_SUMMARY.md
+LANGUAGE_STATUS.md
+backend_success_summary.md
+
