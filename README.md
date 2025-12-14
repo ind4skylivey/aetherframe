@@ -25,8 +25,16 @@
   <img src="https://img.shields.io/badge/Docker-ready-14b8a6?style=for-the-badge&logo=docker&logoColor=0ff&labelColor=0b1224&color=06b6d4">
 </p>
 
+## 🎬 Ecosystem Showcase
+
 <p align="center">
-  <img src="assets/reveris-demo.gif" width="880" alt="Reveris Noctis UI Demo">
+  <strong>🌐 Complete Ecosystem Tour</strong><br/>
+  <img src="assets/DEMO.gif" width="880" alt="AetherFrame Complete Ecosystem Demo">
+</p>
+
+<p align="center">
+  <strong>📖 Interactive API Documentation</strong><br/>
+  <img src="assets/aetherframe-swagger.gif" width="880" alt="AetherFrame API Swagger UI">
 </p>
 
 ---
