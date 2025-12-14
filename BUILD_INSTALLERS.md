@@ -385,3 +385,31 @@ After successful build:
 **Status**: ✅ GitHub Actions Configured
 **Next**: Create app icons and trigger first build!
 **Files**: `.github/workflows/build-desktop.yml`
+
+## 🔧 Troubleshooting
+
+### Linux: Black/Blank Screen (EGL Error)
+
+If the AppImage shows a black screen with EGL errors in the console:
+
+```bash
+Could not create default EGL display: EGL_BAD_PARAMETER
+```
+
+**Solution**: Run with software rendering:
+
+```bash
+WEBKIT_DISABLE_COMPOSITING_MODE=1 LIBGL_ALWAYS_SOFTWARE=1 ./aether-frame_*.AppImage
+```
+
+Or create a launcher script:
+
+```bash
+#!/bin/bash
+export WEBKIT_DISABLE_COMPOSITING_MODE=1
+export LIBGL_ALWAYS_SOFTWARE=1
+./aether-frame_*.AppImage
+```
+
+This disables hardware acceleration and uses software rendering, which is more compatible across different Linux systems.
+
